@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'configuracao',
     'cadastro_pessoa',
     'produto',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
