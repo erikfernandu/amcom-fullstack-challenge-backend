@@ -38,6 +38,7 @@ class Venda(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE)
     produtos = models.ManyToManyField(Produto, verbose_name='Produtos', through='ItemVenda')
+    valor_total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='Valor Total')
     update = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
@@ -52,3 +53,4 @@ class ItemVenda(models.Model):
     venda = models.ForeignKey(Venda, on_delete=models.CASCADE)
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     quantidade = models.PositiveIntegerField(default=1, blank=False, null=False)
+    

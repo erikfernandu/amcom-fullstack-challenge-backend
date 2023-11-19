@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.db.models import Sum, Count
+from django.db.models import Sum
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,6 +7,7 @@ from rest_framework.exceptions import NotFound
 from .models import Vendedor, Cliente
 from produto.models import Venda, ItemVenda
 from .serializers import VendedorSerializer, ClienteSerializer
+from datetime import datetime
 
 # Create your views here.
 class VendedorAPI(APIView):
@@ -44,8 +45,7 @@ class VendedorAPI(APIView):
 
 class VendedoresAPI(APIView):
     def get(self, request, format=None):
-        vendedores = Vendedor.objects.annotate(total_comissao=Count('venda__itemvenda__quantidade')).values('id', 'nome', 'email', 'telefone', 'total_comissao')
-        print(vendedores)
+        vendedores = Vendedor.objects.annotate(total_comissao=Sum('venda__valor_total')).filter(venda__dataehora__range=[datetime(2023, 1, 1), datetime(2023, 11, 10)]).values('id', 'nome', 'email', 'telefone', 'total_comissao')
         serializer = VendedorSerializer(vendedores, many=True)
         return Response(serializer.data)
     
