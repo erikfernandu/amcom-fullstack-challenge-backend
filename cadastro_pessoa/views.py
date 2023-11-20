@@ -45,7 +45,7 @@ class VendedorAPI(APIView):
 
 class VendedoresAPI(APIView):
     def get(self, request, format=None):
-        vendedores = Vendedor.objects.annotate(total_comissao=Sum('venda__valor_total')).filter(venda__dataehora__range=[datetime(2023, 1, 1), datetime(2023, 11, 10)]).values('id', 'nome', 'email', 'telefone', 'total_comissao')
+        vendedores = Vendedor.objects.annotate(total_comissao=Sum('venda__valor_total')).filter(venda__dataehora__range=[datetime(2023, 1, 1), datetime(2023, 11, 28)]).values('id', 'nome', 'email', 'telefone', 'total_comissao')
         serializer = VendedorSerializer(vendedores, many=True)
         return Response(serializer.data)
     
