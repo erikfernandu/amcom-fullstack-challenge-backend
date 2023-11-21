@@ -11,6 +11,7 @@ class Vendedor(models.Model):
         ordering = ['nome']
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    codigo = models.CharField(max_length=60, blank=False, null=False, verbose_name='Código do vendedor')
     nome = models.CharField(max_length=60, blank=False, null=False, verbose_name='Nome do vendedor')
     email = models.EmailField(blank=True, null=True, verbose_name='Endereço de E-mail')
     telefone = models.TextField(max_length=14, verbose_name='Telefone')

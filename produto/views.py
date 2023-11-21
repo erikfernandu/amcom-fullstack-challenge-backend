@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from rest_framework import viewsets, filters
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.exceptions import NotFound
-from rest_framework.decorators import api_view
 from .models import Venda, Produto
+from produto.models import Vendedor
 from .serializers import VendaSerializer, ProdutoSerializer
+from produto.serializers import ComissoesSerializer
 
 # Create your views here.
 class VendaAPI(APIView):
@@ -58,3 +59,9 @@ class ProdutosAPI(APIView):
             produto = Produto.objects.all()
         serializer = ProdutoSerializer(produto, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ComissoesAPI(APIView):
+    def get(self, request, format=None):
+        comissao = Vendedor.objects.annotate(soma=Coalesce(Sum('venda__produtos__itemvenda__quantidade'), 0))
+        serializer = ComissoesSerializer(comissao, many=True)
+        return Response(serializer.data)

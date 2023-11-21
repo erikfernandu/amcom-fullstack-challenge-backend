@@ -29,3 +29,22 @@ class VendaSerializer(serializers.ModelSerializer):
     def get_total_itens(self, obj):
         total = Venda.objects.filter(id=obj.id).annotate(total_itens=Sum('itemvenda__quantidade')).values('total_itens')[0]['total_itens']
         return total
+
+class ComissoesSerializer(serializers.ModelSerializer):
+    vendas = VendaSerializer(many=True, read_only=True)
+    total_vendas = serializers.SerializerMethodField()
+    total_comissoes = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Vendedor
+        fields = ['id', 'codigo', 'nome', 'total_vendas', 'total_comissoes']
+    
+    def get_total_vendas(self, obj):
+        vendas = Venda.objects.filter(vendedor=obj)
+        total_vendas = sum(venda.valor_total for venda in vendas if venda.valor_total is not None)
+        return total_vendas
+    
+    def get_total_comissoes(self, obj):
+        produtos_vendidos = ItemVenda.objects.filter(venda__vendedor=obj)
+        total_comissoes = sum((item.produto.valor * item.produto.comissao / 100) * item.quantidade for item in produtos_vendidos if item.produto.valor is not None and item.produto.comissao is not None)
+        return total_comissoes
