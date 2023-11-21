@@ -16,11 +16,6 @@ class ItemVendaSerializer(serializers.ModelSerializer):
         fields = ['produto', 'quantidade']
 
 class VendaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Venda
-        fields = ['id', 'num_notafiscal', 'dataehora', 'cliente', 'vendedor', 'produtos', 'itemvenda_set', 'valor_total']
-
-class VendasSerializer(serializers.ModelSerializer):
     cliente = serializers.CharField(source='cliente.nome', read_only=True)
     vendedor = serializers.CharField(source='vendedor.nome', read_only=True)
     dataehora = serializers.DateTimeField(format='%d/%m/%Y - %H:%M:%S', read_only=True)

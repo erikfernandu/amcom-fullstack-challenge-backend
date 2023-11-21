@@ -6,14 +6,14 @@ from rest_framework import status
 from rest_framework.exceptions import NotFound
 from rest_framework.decorators import api_view
 from .models import Venda, Produto
-from .serializers import VendaSerializer, VendasSerializer, ProdutoSerializer
+from .serializers import VendaSerializer, ProdutoSerializer
 
 # Create your views here.
 class VendaAPI(APIView):
-    # def get(self, request, pk, format=None):
-    #     venda = self.get_object(pk)
-    #     serializer = VendaSerializer(venda)
-    #     return Response(serializer.data)
+    def get(self, request, pk, format=None):
+        venda = Venda.objects.get(id=pk)
+        serializer = VendaSerializer(venda, many=False)
+        return Response(serializer.data)
     
     # def put(self, request, pk, format=None):
     #     venda = self.get_object(pk)
@@ -36,20 +36,14 @@ class VendaAPI(APIView):
         venda.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    # def get_object(self, pk):
-    #     try:
-    #         return Venda.objects.get(pk=pk)
-    #     except Venda.DoesNotExist:
-    #         raise NotFound("Venda não encontrado")
-
 class VendasAPI(APIView):
     def get(self, request, format=None):
         venda = Venda.objects.all()
-        serializer = VendasSerializer(venda, many=True)
+        serializer = VendaSerializer(venda, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = VendasSerializer(data=request.data)
+        serializer = VendaSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
