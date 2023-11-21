@@ -2,13 +2,18 @@
 from rest_framework import serializers
 from .models import Vendedor, Cliente
 
-class VendedorSerializer(serializers.ModelSerializer):
+
+class VendedoresSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vendedor
-        fields = ['id', 'nome', 'email', 'telefone', 'total_comissao']
-    total_comissao = serializers.DecimalField(max_digits=10, decimal_places=2)
+        fields = ['id', 'nome']
 
-class ClienteSerializer(serializers.ModelSerializer):
+class ClientesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
-        fields = ['id', 'nome', 'email', 'telefone']
+        fields = ['id', 'nome']
+
+class ComissoesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vendedor
+        fields = ['id', 'nome']
