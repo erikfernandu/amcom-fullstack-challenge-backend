@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.db.models import Sum, Q
 from rest_framework import serializers
-from .models import Produto, Venda, ItemVenda, Vendedor
+from .models import Produto, Venda, ItemVenda, Vendedor, Cliente
 from decimal import Decimal
 
 class ProdutoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Produto
-        fields = ['codigo', 'descricao', 'valor', 'comissao']
+        fields = ['id', 'codigo', 'descricao', 'valor', 'comissao']
 
 class ItemVendaSerializer(serializers.ModelSerializer):
     produto = ProdutoSerializer(read_only=True)
@@ -41,6 +41,27 @@ class VendaSerializer(serializers.ModelSerializer):
         total_comissoes = sum((item.quantidade * item.produto.valor * item.produto.comissao) / 100 for item in produtos_vendidos if item.produto.valor is not None)
         return total_comissoes
 
+class NovoItemVendaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemVenda
+        fields = ['produto', 'quantidade']
+
+
+class NovaVendaSerializer(serializers.ModelSerializer):
+    produtos = NovoItemVendaSerializer(many=True)
+    class Meta:
+        model = Venda
+        fields = ['id', 'num_notafiscal', 'cliente', 'vendedor', 'produtos']
+    
+    def create(self, validated_data):
+        itens_venda_data = validated_data.pop('produtos')
+        venda = Venda.objects.create(**validated_data)
+        for item_data in itens_venda_data:
+            produto_id = item_data.pop('produto')
+            ItemVenda.objects.create(venda=venda, produto=produto_id, **item_data)
+
+        return venda
+
 class ComissoesSerializer(serializers.ModelSerializer):
     vendas = VendaSerializer(many=True, read_only=True)
     total_vendas = serializers.SerializerMethodField()
@@ -50,22 +71,22 @@ class ComissoesSerializer(serializers.ModelSerializer):
         model = Vendedor
         fields = ['id', 'codigo', 'nome', 'vendas', 'total_vendas', 'total_comissoes']
     
-    def get_total_vendas(self, obj):
+    def get_total_vendas(self, vendedor):
         query = Q()
         if self.context.get('start_date'):
             query &= Q(dataehora__gte=self.context.get('start_date'))
         if self.context.get('end_date'):
             query &= Q(dataehora__lte=self.context.get('end_date'))
-        vendas = Venda.objects.filter(vendedor=obj).filter(query)
+        vendas = Venda.objects.filter(vendedor=vendedor).filter(query)
         total_vendas = sum(Decimal(item.produto.valor) * item.quantidade for venda in vendas for item in ItemVenda.objects.filter(venda=venda) if item.produto.valor is not None )
         return total_vendas
     
-    def get_total_comissoes(self, obj):
+    def get_total_comissoes(self, vendedor):
         query = Q()
         if self.context.get('start_date'):
             query &= Q(venda__dataehora__gte=self.context.get('start_date'))
         if self.context.get('end_date'):
             query &= Q(venda__dataehora__lte=self.context.get('end_date'))
-        produtos_vendidos = ItemVenda.objects.filter(venda__vendedor=obj).filter(query)
+        produtos_vendidos = ItemVenda.objects.filter(venda__vendedor=vendedor).filter(query)
         total_comissoes = sum((item.produto.valor * item.produto.comissao / 100) * item.quantidade for item in produtos_vendidos if item.produto.valor is not None and item.produto.comissao is not None)
         return total_comissoes
