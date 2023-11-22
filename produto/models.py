@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.db import models, transaction
-from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from cadastro_pessoa.models import Cliente, Vendedor
 import uuid
@@ -38,7 +36,6 @@ class Venda(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE)
     produtos = models.ManyToManyField(Produto, verbose_name='Produtos', through='ItemVenda')
-    valor_total = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True, verbose_name='Valor Total')
     update = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:

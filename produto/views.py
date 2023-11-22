@@ -44,9 +44,10 @@ class VendasAPI(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        print(request)
         serializer = VendaSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            #serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -61,7 +62,7 @@ class ProdutosAPI(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class ComissoesAPI(APIView):
-    def get(self, request, format=None):
-        comissao = Vendedor.objects.annotate(soma=Coalesce(Sum('venda__produtos__itemvenda__quantidade'), 0))
-        serializer = ComissoesSerializer(comissao, many=True)
+    def get(self, request, format=None, *args, **kwargs):
+        comissao = Vendedor.objects.all().order_by('codigo')
+        serializer = ComissoesSerializer(comissao, many=True, context={'start_date': self.request.GET.get('start_date'), 'end_date': self.request.GET.get('end_date')})
         return Response(serializer.data)

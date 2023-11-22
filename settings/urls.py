@@ -17,19 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from produto.views import VendaAPI, VendasAPI, ProdutosAPI
-from cadastro_pessoa.views import VendedoresAPI, ClientesAPI #, ComissoesAPI
+from cadastro_pessoa.views import VendedoresAPI, ClientesAPI
 from produto.views import ComissoesAPI
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('api/vendedor/<uuid:pk>/', VendedorAPI.as_view(), name='vendedor'),
     path('api/vendedores/', VendedoresAPI.as_view(), name='vendedores'),
-    # path('api/cliente/<uuid:pk>/', ClienteAPI.as_view(), name='cliente'),
     path('api/clientes/', ClientesAPI.as_view(), name='clientes'),
 
     path('api/produtos/', ProdutosAPI.as_view(), name='produtos'),
-    path('api/venda/<uuid:pk>/', VendaAPI.as_view(), name='venda'),
+    
     path('api/vendas/', VendasAPI.as_view(), name='vendas'),
+    path('api/novavenda/', VendasAPI.as_view(), name='novavenda'),
+    path('api/venda/<uuid:pk>/', VendaAPI.as_view(), name='venda'),
     path('api/comissoes/', ComissoesAPI.as_view(), name='comissoes'),
 
 ]

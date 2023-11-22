@@ -12,8 +12,3 @@ class ClientesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
         fields = ['id', 'nome']
-
-# class ComissoesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Vendedor
-#         fields = ['id', 'nome']
