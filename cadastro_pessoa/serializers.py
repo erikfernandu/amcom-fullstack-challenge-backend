@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from .models import Vendedor, Cliente
 
-
+# Create your serializers here.
 class VendedoresSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vendedor

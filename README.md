@@ -1,36 +1,58 @@
 
 # Papelaria AMCom
 
-    Aplicação para gestão de venda e apuração de comissões dos vendedores.
+    Bem-vindo à aplicação back-end da Papelaria AMCom, projetada para a gestão de vendas e apuração de comissão das vendas.
 
 # Pré-requisitos
 
-    ## Python (3.11.2)
-    ## Django (4.2.7)
+    Certifique-se de ter as seguintes dependências instaladas em seu ambiente de desenvolvimento:
+
+    ## python (3.11.2)
+    ## django (4.2.7)
+    ## djangorestframework (3.14.0)
+    ## django-cors-headers (4.3.1)
 
 # Instalação
 
-    Primeiro, é necessário realizar o download do projeto via github, por meio do comando:
+    1. Faça o download do projeto via GitHub usando o seguinte comando:
 
-        git clone --depth 1 https://github.com/erikfernandu/amcom-fullstack-challenge.git
+        git clone --depth 1 https://github.com/erikfernandu/amcom-fullstack-challenge-backend.git
 
-    Como boa prática, realize o processo de ativação do ambiente virtual:
+    2. Como boa prática, realize o processo de criação e ativação do ambiente virtual:
 
+        cd amcom-fullstack-challenge-backend
+        install virtualenv venv
+        pip install -r requirements.txt
         source venv/bin/activate.sh
 
 # Configuração
 
-    python3 manage.py migrate
+        python3 manage.py migrate
+        python3 manage.py makemigrations
+        python3 manage.py createsuperuser
+
+    Preencha todos os campos solicitados.
 
 # Uso
 
-    python3 manage.py runserver
+    Inicie o servidor local com o comando:
 
-# Licença
+        python3 manage.py runserver
 
-    Indique a licença sob a qual o seu projeto está disponível. Por exemplo, MIT, Apache, etc.
+    Acesse a aplicação em seu navegador através do link http://localhost:8000/admin
+
+    Faça login e inicie o processo de registro dos produtos.
+
+# Contribuições
+
+    Sinta-se à vontade para contribuir para este projeto! Abra problemas (issues) e envie pull requests para melhorar nosso código.
 
 # Contato
 
-    Forneça informações de contato para que os desenvolvedores possam entrar em contato com você em caso de dúvidas ou problemas.
+    Em caso de dúvidas ou problemas, sinta-se à vontade para entrar em contato:
 
+        Nome: Erik Morais
+        E-mail: erikfernandu@outlook.com
+        Linkedin: https://www.linkedin.com/in/erik-fernando-morais-dos-santos-66911b246/
+
+    Fique à vontade para explorar, modificar e aprimorar nosso código. Agradecemos sua contribuição!

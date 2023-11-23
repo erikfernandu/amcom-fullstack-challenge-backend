@@ -24,12 +24,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/vendedores/', VendedoresAPI.as_view(), name='vendedores'),
     path('api/clientes/', ClientesAPI.as_view(), name='clientes'),
-
     path('api/produtos/', ProdutosAPI.as_view(), name='produtos'),
-    
     path('api/vendas/', VendasAPI.as_view(), name='vendas'),
-    path('api/novavenda/', VendasAPI.as_view(), name='novavenda'),
-    path('api/venda/<uuid:pk>/', VendaAPI.as_view(), name='venda'),
+    path('api/venda-nova/', VendasAPI.as_view(), name='venda-nova'),
+    path('api/venda-detalhes/<uuid:pk>/', VendaAPI.as_view(), name='venda-detalhes'),
     path('api/comissoes/', ComissoesAPI.as_view(), name='comissoes'),
 
 ]

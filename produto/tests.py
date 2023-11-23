@@ -5,6 +5,7 @@ from .models import Produto, Venda, ItemVenda, Cliente, Vendedor
 
 # Create your tests here.
 class ProdutoModelTest(TestCase):
+
     def test_criar_produto(self):
         produto = Produto.objects.create(
             codigo="ABC123",
@@ -43,6 +44,7 @@ class ProdutoModelTest(TestCase):
         self.assertIsNone(produto.descricao)
 
 class VendaModelTest(TestCase):
+
     def setUp(self):
         self.cliente = Cliente.objects.create(nome="Cliente Teste", telefone="123456789")
         self.vendedor = Vendedor.objects.create(nome="Vendedor Teste", telefone="987654321")
@@ -72,6 +74,7 @@ class VendaModelTest(TestCase):
             )
 
 class ItemVendaModelTest(TestCase):
+    
     def setUp(self):
         self.produto = Produto.objects.create(
             codigo="ABC123",

@@ -2,7 +2,6 @@ from django.test import TestCase
 from configuracao.models import ConfDiaSemana
 
 # Create your tests here.
-
 class ConfDiaSemanaModelTest(TestCase):
     def test_confdiasemana_criar(self):
         configuracao = ConfDiaSemana.objects.create(
