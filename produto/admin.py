@@ -22,5 +22,5 @@ class VendaAdmin(admin.ModelAdmin):
     total_venda.short_description = 'Total das vendas'
 
     def total_comissao(self, obj):
-        return sum(item.produto.comissao * (item.produto.valor * item.quantidade) /100 for item in obj.itemvenda_set.all())
+        return sum(item.comissao * (item.produto.valor * item.quantidade) /100 for item in obj.itemvenda_set.all())
     total_comissao.short_description = 'Total das comissões'

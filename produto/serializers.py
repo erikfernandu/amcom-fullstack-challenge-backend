@@ -10,20 +10,19 @@ class BaseProdutoSerializer(serializers.ModelSerializer):
     class Meta:
         abstract = True
         model = Produto
-        fields = ['id', 'codigo', 'descricao', 'valor', 'comissao']
+        fields = ['id', 'codigo', 'descricao', 'valor']
 
 class BaseItemVendaSerializer(serializers.ModelSerializer):
 
     class Meta:
         abstract = True
         model = ItemVenda
-        fields = ['produto', 'quantidade']
+        fields = ['produto', 'quantidade', 'comissao']
 
 class DetalheItemVendaSerializer(BaseItemVendaSerializer):
     produto = BaseProdutoSerializer()
 
 class BaseVendaSerializer(serializers.ModelSerializer):
-    dataehora = serializers.DateTimeField(format='%d/%m/%Y - %H:%M:%S')
     
     class Meta:
         abstract = True
@@ -53,10 +52,11 @@ class ListaVendaSerializer(BaseVendaSerializer):
     
     def get_valor_total_comissoes(self, venda):
         produtos_vendidos = ItemVenda.objects.filter(venda=venda)
-        total_comissoes = sum((item.quantidade * item.produto.valor * item.produto.comissao) / 100 for item in produtos_vendidos if item.produto.valor is not None)
+        total_comissoes = sum((item.quantidade * item.produto.valor * item.comissao) / 100 for item in produtos_vendidos if item.produto.valor is not None)
         return total_comissoes
 
 class EnvioDetalheSerializer(BaseVendaSerializer):
+    dataehora = serializers.DateTimeField(format='%Y-%m-%dT%H:%M')
     itemvenda_set = DetalheItemVendaSerializer(many=True)
     valor_total = serializers.SerializerMethodField()
 
@@ -74,7 +74,7 @@ class RetornoDetalheVendaSerializer(BaseVendaSerializer):
         instance.cliente = validated_data.get('cliente', instance.cliente)
         instance.vendedor = validated_data.get('vendedor', instance.vendedor)
         instance.save()
-
+        print('SERIALIZER', itens_venda_data)
         if itens_venda_data is not None:
             instance.itemvenda_set.all().delete()
             for item_data in itens_venda_data:
@@ -94,7 +94,7 @@ class CriarVendaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Venda
-        fields = ['id', 'num_notafiscal', 'cliente', 'vendedor', 'itemvenda_set']
+        fields = ['id', 'num_notafiscal', 'dataehora', 'cliente', 'vendedor', 'itemvenda_set']
     
     def create(self, validated_data):
         itens_venda_data = validated_data.pop('itemvenda_set')
@@ -102,7 +102,6 @@ class CriarVendaSerializer(serializers.ModelSerializer):
         for item_data in itens_venda_data:
             produto_id = item_data.pop('produto')
             ItemVenda.objects.create(venda=venda, produto=produto_id, **item_data)
-
         return venda
 
 class ComissoesSerializer(serializers.ModelSerializer):
@@ -116,10 +115,9 @@ class ComissoesSerializer(serializers.ModelSerializer):
 
     def get_total_vendas(self, vendedor):
         query = Q()
-        if self.context.get('end_date') is not None:
-            self.context.get('start_date')
+        if self.context.get('start_date'):
             query &= Q(dataehora__gte=self.context.get('start_date'))
-        if self.context.get('end_date') is not None:
+        if self.context.get('end_date'):
             query &= Q(dataehora__lte=self.context.get('end_date'))
         vendas = Venda.objects.filter(vendedor=vendedor).filter(query)
         total_vendas = sum(Decimal(item.produto.valor) * item.quantidade for venda in vendas for item in ItemVenda.objects.filter(venda=venda) if item.produto.valor is not None )
@@ -132,5 +130,5 @@ class ComissoesSerializer(serializers.ModelSerializer):
         if self.context.get('end_date') is not None:
             query &= Q(venda__dataehora__lte=self.context.get('end_date'))
         produtos_vendidos = ItemVenda.objects.filter(venda__vendedor=vendedor).filter(query)
-        total_comissoes = sum((item.produto.valor * item.produto.comissao / 100) * item.quantidade for item in produtos_vendidos if item.produto.valor is not None and item.produto.comissao is not None)
+        total_comissoes = sum((item.produto.valor * item.comissao / 100) * item.quantidade for item in produtos_vendidos if item.produto.valor is not None and item.produto.comissao is not None)
         return total_comissoes

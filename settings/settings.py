@@ -113,6 +113,8 @@ LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'America/Sao_Paulo'
 
+DATE_INPUT_FORMATS = ['%Y-%m-%dT%H:%M']
+
 USE_I18N = True
 
 USE_TZ = True

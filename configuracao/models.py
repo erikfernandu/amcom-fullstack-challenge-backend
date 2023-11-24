@@ -10,7 +10,7 @@ class ConfDiaSemana(models.Model):
         verbose_name_plural = 'Configurações'
         ordering = ['dia_da_semana']
 
-    DIAS_DA_SEMANA = [('1', 'Domingo'),('2', 'Segunda-feira'),('3', 'Terça-feira'),('4', 'Quarta-feira'),('5', 'Quinta-feira'),('6', 'Sexta-feira'),('7', 'Sábado')]
+    DIAS_DA_SEMANA = [('1', 'Segunda-feira'),('2', 'Terça-feira'),('3', 'Quarta-feira'),('4', 'Quinta-feira'),('5', 'Sexta-feira'),('6', 'Sábado'),('7', 'Domingo')]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     dia_da_semana = models.CharField(unique=True, max_length=1, choices=DIAS_DA_SEMANA, blank=False, null=False, verbose_name='Dia da semana')
@@ -18,3 +18,6 @@ class ConfDiaSemana(models.Model):
     valor_maximo = models.PositiveIntegerField(blank=True, null=True, verbose_name='Percentual de comissão máximo')
     timestamp = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.dia_da_semana

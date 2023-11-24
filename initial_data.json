@@ -1,0 +1,10 @@
+[
+    {"model": "configuracao.ConfDiaSemana", "pk": "c15718d0-424b-420d-b281-07db01383115", "fields": {"dia_da_semana": "1", "valor_minimo": 0.0, "valor_maximo": 10.0, "timestamp": "2023-01-01T12:00:00Z", "update": "2023-01-01T12:00:00Z"}},
+    {"model": "configuracao.ConfDiaSemana", "pk": "49a87b2e-92ca-486e-b85c-c78cdfc34346", "fields": {"dia_da_semana": "2", "valor_minimo": 0.0, "valor_maximo": 10.0, "timestamp": "2023-01-01T12:00:00Z", "update": "2023-01-01T12:00:00Z"}},
+    {"model": "configuracao.ConfDiaSemana", "pk": "389aea34-d142-4c68-a550-d33cfabfddb4", "fields": {"dia_da_semana": "3", "valor_minimo": 0.0, "valor_maximo": 10.0, "timestamp": "2023-01-01T12:00:00Z", "update": "2023-01-01T12:00:00Z"}},
+    {"model": "configuracao.ConfDiaSemana", "pk": "e174efb3-1aab-4547-8489-77a62e8ad43c", "fields": {"dia_da_semana": "4", "valor_minimo": 0.0, "valor_maximo": 10.0, "timestamp": "2023-01-01T12:00:00Z", "update": "2023-01-01T12:00:00Z"}},
+    {"model": "configuracao.ConfDiaSemana", "pk": "3baff8fa-36aa-4593-b1fa-91638e153cf4", "fields": {"dia_da_semana": "5", "valor_minimo": 0.0, "valor_maximo": 10.0, "timestamp": "2023-01-01T12:00:00Z", "update": "2023-01-01T12:00:00Z"}},
+    {"model": "configuracao.ConfDiaSemana", "pk": "e7f67bdd-ee27-4749-91ea-ee254b8acc40", "fields": {"dia_da_semana": "6", "valor_minimo": 0.0, "valor_maximo": 10.0, "timestamp": "2023-01-01T12:00:00Z", "update": "2023-01-01T12:00:00Z"}},
+    {"model": "configuracao.ConfDiaSemana", "pk": "c01997c6-eee4-4e16-8a76-f369ddbcd0c5", "fields": {"dia_da_semana": "7", "valor_minimo": 0.0, "valor_maximo": 10.0, "timestamp": "2023-01-01T12:00:00Z", "update": "2023-01-01T12:00:00Z"}}
+]
+  
