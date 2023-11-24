@@ -70,11 +70,10 @@ class RetornoDetalheVendaSerializer(BaseVendaSerializer):
     def update(self, instance, validated_data):
         itens_venda_data = validated_data.pop('itemvenda_set', None)
         instance.num_notafiscal = validated_data.get('num_notafiscal', instance.num_notafiscal)
-        instance.dataehora = validated_data.get('datatehora', instance.dataehora)
+        instance.dataehora = validated_data.get('dataehora', instance.dataehora)
         instance.cliente = validated_data.get('cliente', instance.cliente)
         instance.vendedor = validated_data.get('vendedor', instance.vendedor)
         instance.save()
-        print('SERIALIZER', itens_venda_data)
         if itens_venda_data is not None:
             instance.itemvenda_set.all().delete()
             for item_data in itens_venda_data:
@@ -116,9 +115,10 @@ class ComissoesSerializer(serializers.ModelSerializer):
     def get_total_vendas(self, vendedor):
         query = Q()
         if self.context.get('start_date'):
-            query &= Q(dataehora__gte=self.context.get('start_date'))
+            query &= Q(dataehora__date__gte=self.context.get('start_date'))
         if self.context.get('end_date'):
-            query &= Q(dataehora__lte=self.context.get('end_date'))
+            query &= Q(dataehora__date__lte=self.context.get('end_date'))
+            
         vendas = Venda.objects.filter(vendedor=vendedor).filter(query)
         total_vendas = sum(Decimal(item.produto.valor) * item.quantidade for venda in vendas for item in ItemVenda.objects.filter(venda=venda) if item.produto.valor is not None )
         return total_vendas

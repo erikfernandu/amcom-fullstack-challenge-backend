@@ -27,16 +27,7 @@ class VendaAPI(APIView):
         except Venda.DoesNotExist:
             return Response({"mensagem": "VENDA NÃO ENCONTRADA"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            print(e)
             return Response({"mensagem": f"ERRO INTERNO DO SERVIDOR: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    # def patch(self, request, pk, format=None):
-    #     venda = self.get_object(pk)
-    #     serializer = ListaVendaSerializer(venda, data=request.data, partial=True)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def delete(self, request, pk):
         try:
