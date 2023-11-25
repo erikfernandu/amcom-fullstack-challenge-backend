@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Venda, Produto
 from produto.models import Vendedor
-from .serializers import ListaVendaSerializer, BaseProdutoSerializer, EnvioDetalheSerializer, RetornoDetalheVendaSerializer, CriarVendaSerializer
+from .serializers import ListaVendaSerializer, ProdutoSerializer, EnvioDetalheSerializer, RetornoDetalheVendaSerializer, CriarVendaSerializer
 from produto.serializers import ComissoesSerializer
 
 # Create your views here.
@@ -21,7 +22,7 @@ class VendaAPI(APIView):
             serializer = RetornoDetalheVendaSerializer(venda, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                return Response({'mensagem': 'VENDA ATUALIZADA COM SUCESSO!'}, status=status.HTTP_201_CREATED)
+                return Response({'mensagem': 'VENDA ALTERADA COM SUCESSO!'}, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Venda.DoesNotExist:
@@ -62,10 +63,10 @@ class ProdutosAPI(APIView):
     def get(self, request, *args, **kwargs):
         search = request.query_params.get('search', None)
         if search:
-            produto = Produto.objects.filter(descricao__icontains=search)
+            produto = Produto.objects.filter(Q(descricao__icontains=search) | Q(codigo__icontains=search))
         else:
             produto = Produto.objects.all()
-        serializer = BaseProdutoSerializer(produto, many=True)
+        serializer = ProdutoSerializer(produto, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class ComissoesAPI(APIView):

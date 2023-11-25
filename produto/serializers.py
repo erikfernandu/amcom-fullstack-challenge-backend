@@ -6,11 +6,23 @@ from decimal import Decimal
 
 # Create your serializers here.
 class BaseProdutoSerializer(serializers.ModelSerializer):
-
+    
     class Meta:
         abstract = True
         model = Produto
         fields = ['id', 'codigo', 'descricao', 'valor']
+
+class ProdutoSerializer(serializers.ModelSerializer):
+    
+    codigo_descricao = serializers.SerializerMethodField()
+
+    class Meta:
+        abstract = True
+        model = Produto
+        fields = ['id', 'codigo', 'descricao', 'valor', 'codigo_descricao']
+    
+    def get_codigo_descricao(self, instance):
+        return f'{instance.codigo} - {instance.descricao}'
 
 class BaseItemVendaSerializer(serializers.ModelSerializer):
 
@@ -18,6 +30,12 @@ class BaseItemVendaSerializer(serializers.ModelSerializer):
         abstract = True
         model = ItemVenda
         fields = ['produto', 'quantidade', 'comissao']
+
+class CriarItemVendaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ItemVenda
+        fields = ['produto', 'quantidade']
 
 class DetalheItemVendaSerializer(BaseItemVendaSerializer):
     produto = BaseProdutoSerializer()
@@ -81,12 +99,6 @@ class RetornoDetalheVendaSerializer(BaseVendaSerializer):
                 quantidade = item_data['quantidade']
                 ItemVenda.objects.update_or_create(venda=instance, produto=produto, quantidade=quantidade)
         return instance
-
-class CriarItemVendaSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = ItemVenda
-        fields = ['produto', 'quantidade']
 
 class CriarVendaSerializer(serializers.ModelSerializer):
     itemvenda_set = CriarItemVendaSerializer(many=True)
