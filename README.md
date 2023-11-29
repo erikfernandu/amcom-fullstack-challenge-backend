@@ -2,10 +2,12 @@
 # Papelaria AMCom
 
     Bem-vindo à aplicação back-end da Papelaria AMCom, projetada para a gestão de vendas e apuração de comissão das vendas.
+    O presente documento visa orientar o processo de instação e configuração básica em ambiente Linux.
 
 # Pré-requisitos
 
-    Certifique-se de ter as seguintes dependências instaladas em seu ambiente de desenvolvimento:
+    Este projeto faz uso das seguintes dependências instaladas para o correto funcionamento.
+    O processo de instalação destas, será abordada no próximo tópico.
 
     ## python (3.11.2)
     ## django (4.2.7)
@@ -18,12 +20,19 @@
 
         git clone --depth 1 https://github.com/erikfernandu/amcom-fullstack-challenge-backend.git
 
-    2. Como boa prática, realize o processo de criação e ativação do ambiente virtual:
+    2. Para acessar o diretório dos arquivos deste projeto:
 
         cd amcom-fullstack-challenge-backend
-        install virtualenv venv
-        pip install -r requirements.txt
+
+    3. Como boa prática, realizaremos o processo instalação, criação e ativação do ambiente virtual:
+
+        sudo apt install virtualenv
+        virtualenv venv 
         source venv/bin/activate.sh
+    
+    4. Para instalação das dependências do projeto:
+
+        pip install -r requirements.txt
 
 # Configuração
 
@@ -32,7 +41,7 @@
         python3 manage.py loaddata initial_data.json
         python3 manage.py createsuperuser
 
-    Preencha todos os campos solicitados.
+    Preencha todos os campos solicitados: nome, e-mail e senha.
 
 # Uso
 
@@ -42,7 +51,7 @@
 
     Acesse a aplicação em seu navegador através do link http://localhost:8000/admin
 
-    Faça login e inicie o processo de registro dos produtos.
+    Faça login e inicie o processo de registro dos produtos, vendedores e clientes.
 
 # Contribuições
 
